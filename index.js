@@ -55,6 +55,19 @@ server.post('/api/users', (req, res) => {
         .json({ errorMessage: 'Please provide name and bio for the user.' });
     });
 });
+// DELETE request
+server.delete('/api/users/:id', (req, res) => {
+  const id = req.params.id;
+
+  db.remove(id)
+    .then(count => {
+      res.status(200).json({ message: `User with id ${id} has been deleted` });
+    })
+    .catch(err => {
+      console.log('error', err);
+        res.status(404).json({ message: "The user with the specified ID does not exist."});
+    });
+});
 
 //Port request
 const port = 8000;
