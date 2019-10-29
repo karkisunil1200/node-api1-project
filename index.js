@@ -7,11 +7,14 @@ const db = '.data/db.js'; // creates the database
 
 const server = express(); // creates a server
 
+// middleware
+server.use(express.json()); // teaches express how to read JSON
+
 //GET the users
 server.get('/api/users', (req, res) => {
   db.find()
     .then(users => {
-      res.json(users);
+      res.status(200).json(users);
     })
     .catch(err => {
       console.log('error', err);
@@ -23,13 +26,33 @@ server.get('/api/users', (req, res) => {
 server.get('/api/users:id', (req, res) => {
   const id = req.params.id;
 
-  db.find()
+  db.findById()
     .then(users => {
-      res.json(id);
+      res.status(200).json(id);
     })
     .catch(error => {
       console.log('error', err);
-      res.json({ message: 'The user with the specified ID does not exist.' });
+      res
+        .status(500)
+        .json({ message: 'The user with the specified ID does not exist.' });
+    });
+});
+
+// POST request
+server.post('/api/users', (req, res) => {
+  const usersInfo = req.body;
+
+  console.log('User information', usersInfo);
+
+  db.add(usersInfo)
+    .then(users => {
+      res.status(201).json(users);
+    })
+    .catch(err => {
+      console.log('error', err);
+      res
+        .status(500)
+        .json({ errorMessage: 'Please provide name and bio for the user.' });
     });
 });
 
