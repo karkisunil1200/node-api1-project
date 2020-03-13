@@ -41,7 +41,7 @@ server.post('/api/users', (req, res) => {
 server.delete('/api/users/:id', (req, res) => {
   const {id} = req.params;
   Hubs.remove(id)
-    .then(removes => res.status(200).json(removes))
+    .then(removes => res.status(404).json(removes))
     .catch(err => {
       errorMessage: 'Something went wrong';
     });
